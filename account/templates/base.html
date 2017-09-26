@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+        <a href="{% url "dashboard" %}" class="logo">我的首页</a>
+
+        <span class="user">
+        {% if request.user.is_authenticated %}
+            当前用户： {{ request.user.first_name }}， <a href="{% url "password_change" %}">修改密码</a> | <a href="{% url "logout_then_login" %}">注销</a>
+        {% else %}
+            <a href="{% url "login" %}">登录</a>
+        {% endif %}
+        </span>
+    </div>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message|safe }}
+                    <a href="#" class="close">×</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
